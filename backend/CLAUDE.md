@@ -68,3 +68,11 @@ uv run pytest
 ## Database
 
 SQLite at `./kanban.db` (in container: `/app/kanban.db`)
+
+## Tests
+
+18 tests covering auth, boards, and cards:
+- `tests/conftest.py` - fixtures (test DB, client, auth headers)
+- `tests/test_auth.py` - login, protected endpoints
+- `tests/test_boards.py` - get board, rename column
+- `tests/test_cards.py` - CRUD, move, delete with reordering
