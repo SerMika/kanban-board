@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+.next/
+
+# Docker
+.docker/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.production
+*.log
+
+# Test coverage
+coverage/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Alembic
+backend/alembic/versions/*.py
+!backend/alembic/versions/.gitkeep
