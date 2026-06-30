@@ -18,11 +18,11 @@ For the MVP, this will run locally (in a docker container)
 
 ## Technical Decisions
 
-- NextJS frontend
-- Python FastAPI backend, including serving the static NextJS site at /
-- Everything packaged into a Docker container
-- Use "uv" as the package manager for python in the Docker container
-- Use SQLLite local database for the database, creating a new db if it doesn't exist
+- NextJS frontend (port 3000)
+- Python FastAPI backend (port 8000)
+- Two-container Docker setup with docker-compose
+- Use "uv" as the package manager for python in Docker
+- SQLite local database, created automatically if missing
 - Start and Stop server scripts for Mac, PC, Linux in scripts/
 
 ## Coding standards
