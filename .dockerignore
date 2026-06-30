@@ -1,0 +1,9 @@
+**/.venv
+**/venv
+**/__pycache__
+**/*.pyc
+.git
+*.db
+.env
+**/node_modules
+**/.next

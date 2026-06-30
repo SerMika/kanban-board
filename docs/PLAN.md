@@ -113,10 +113,14 @@ kanban-board/
 
 ## Part 5: Integration & Scripts
 
-- [ ] **5.1** Configure backend to serve frontend static files at /
-- [ ] **5.2** Create start.sh (Mac/Linux)
-- [ ] **5.3** Create start.ps1 (Windows)
-- [ ] **5.4** Create stop.sh / stop.ps1
+- [x] **5.1** Configure backend to serve frontend static files at / (SKIPPED - using two-container architecture)
+- [x] **5.2** Create start.sh (Mac/Linux)
+- [x] **5.3** Create start.ps1 (Windows)
+- [x] **5.4** Create stop.sh / stop.ps1
+
+**Notes:**
+- Two-container architecture: frontend on :3000, backend on :8000
+- CORS configured to allow cross-origin requests
 
 ---
 
