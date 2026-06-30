@@ -126,12 +126,17 @@ kanban-board/
 
 ## Part 6: Testing & Polish
 
-- [ ] **6.1** Verify login flow works
-- [ ] **6.2** Test drag-and-drop card movement
-- [ ] **6.3** Test column rename
-- [ ] **6.4** Test card create/edit/delete
-- [ ] **6.5** Verify hot reload works in dev mode
-- [ ] **6.6** Build and verify production Docker image
+- [x] **6.1** Verify login flow works
+- [x] **6.2** Test drag-and-drop card movement
+- [x] **6.3** Test column rename
+- [x] **6.4** Test card create/edit/delete
+- [~~6.5~~] Verify hot reload works in dev mode (SKIPPED)
+- [~~6.6~~] Build and verify production Docker image (SKIPPED)
+
+**Notes:**
+- Drag-and-drop works between columns
+- Empty columns accept drops
+- API calls save on drop
 
 ---
 

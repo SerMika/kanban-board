@@ -1,18 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
   DragOverlay,
-  closestCorners,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { arrayMove } from '@dnd-kit/sortable'
 import { useAuth } from '@/lib/AuthContext'
 import { Board, cardApi } from '@/lib/api'
 import { Column } from './Column'
@@ -22,6 +20,9 @@ export function KanbanBoard() {
   const { logout } = useAuth()
   const [board, setBoard] = useState<Board | null>(null)
   const [activeCard, setActiveCard] = useState<CardType | null>(null)
+  const boardRef = useRef<HTMLDivElement>(null)
+  const lastOverColumnRef = useRef<number | null>(null)
+  const lastDestRef = useRef<{ columnId: number; position: number }>({ columnId: 0, position: 0 })
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -45,10 +46,33 @@ export function KanbanBoard() {
     fetchBoard()
   }, [])
 
+  const findColumnByPointer = useCallback((clientX: number, clientY: number): number | null => {
+    if (!boardRef.current || !board) return null
+
+    const columns = boardRef.current.querySelectorAll('.column')
+    for (const col of columns) {
+      const rect = col.getBoundingClientRect()
+      if (clientX >= rect.left && clientX <= rect.right &&
+          clientY >= rect.top && clientY <= rect.bottom) {
+        const colId = col.getAttribute('data-column-id')
+        return colId ? parseInt(colId) : null
+      }
+    }
+    return null
+  }, [board])
+
+  // Extract column id from droppable id (format: "column-{id}")
+  const extractColumnId = (id: string | number): number | null => {
+    if (typeof id === 'number') return id
+    const match = id.match(/^column-(\d+)$/)
+    return match ? parseInt(match[1]) : null
+  }
+
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event
     if (active.data.current?.type === 'card') {
       setActiveCard(active.data.current.card)
+      lastOverColumnRef.current = null
     }
   }
 
@@ -56,26 +80,48 @@ export function KanbanBoard() {
     const { active, over } = event
     if (!over || !board) return
 
-    const activeId = active.id as number
-    const overId = over.id as number
-
     const activeData = active.data.current
     if (activeData?.type !== 'card') return
 
-    // Find source column
-    const activeColumnId = activeData.columnId
-    let overColumnId = activeColumnId
+    // Get pointer position from the translated rect
+    const rect = active.rect.current.translated
+    if (!rect) return
+    const clientY = rect.top + rect.height / 2
+    const clientX = rect.left + rect.width / 2
 
-    // Check if over is a column or a card
-    if (over.data.current?.type === 'column') {
-      overColumnId = overId
-    } else if (over.data.current?.type === 'card') {
+    let overColumnId: number | null = null
+
+    if (over.data.current?.type === 'card') {
       overColumnId = over.data.current.columnId
+    } else if (over.data.current?.type === 'column') {
+      overColumnId = over.data.current.columnId
+    } else {
+      // Try to extract from id
+      overColumnId = extractColumnId(over.id as string)
+      if (!overColumnId) {
+        overColumnId = findColumnByPointer(clientX, clientY)
+      }
     }
 
-    if (activeColumnId === overColumnId) return
+    if (!overColumnId) return
 
-    // Move card between columns optimistically
+    const activeColumnId = activeData.columnId
+
+    // Skip if same column
+    if (activeColumnId === overColumnId) {
+      lastOverColumnRef.current = overColumnId
+      return
+    }
+
+    // Skip if already handled this column
+    if (lastOverColumnRef.current === overColumnId) return
+    lastOverColumnRef.current = overColumnId
+
+    // Store destination for handleDragEnd
+    lastDestRef.current = { columnId: overColumnId, position: 0 }
+
+    const activeId = active.id as number
+
     setBoard((prev) => {
       if (!prev) return prev
 
@@ -86,18 +132,14 @@ export function KanbanBoard() {
       const cardIndex = sourceColumn.cards.findIndex(c => c.id === activeId)
       if (cardIndex === -1) return prev
 
-      const card = sourceColumn.cards[cardIndex]
-      const newCard = { ...card, columnId: overColumnId } as CardType & { columnId: number }
+      const card = { ...sourceColumn.cards[cardIndex] }
 
       const newColumns = prev.columns.map(col => {
         if (col.id === activeColumnId) {
           return { ...col, cards: col.cards.filter(c => c.id !== activeId) }
         }
         if (col.id === overColumnId) {
-          const overIndex = col.cards.findIndex(c => c.id === overId)
-          const insertIndex = overIndex >= 0 ? overIndex : col.cards.length
-          const newCards = [...col.cards]
-          newCards.splice(insertIndex, 0, newCard)
+          const newCards = [...col.cards, card]
           return { ...col, cards: newCards }
         }
         return col
@@ -110,38 +152,20 @@ export function KanbanBoard() {
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
     setActiveCard(null)
+    lastOverColumnRef.current = null
 
-    if (!over || !board) return
-
-    const activeId = active.id as number
-    const overId = over.id as number
+    if (!over) return
 
     const activeData = active.data.current
     if (activeData?.type !== 'card') return
 
-    const activeCard = activeData.card as CardType
-    let destColumnId = activeData.columnId
-    let destPosition = 0
-
-    // Find destination column and position
-    if (over.data.current?.type === 'column') {
-      destColumnId = overId
-      const destColumn = board.columns.find(c => c.id === destColumnId)
-      destPosition = destColumn?.cards.length || 0
-    } else if (over.data.current?.type === 'card') {
-      destColumnId = over.data.current.columnId
-      const destColumn = board.columns.find(c => c.id === destColumnId)
-      if (destColumn) {
-        const overIndex = destColumn.cards.findIndex(c => c.id === overId)
-        destPosition = overIndex >= 0 ? overIndex : destColumn.cards.length
-      }
-    }
+    const activeId = active.id as number
+    const dest = lastDestRef.current
 
     try {
-      await cardApi.move(activeId, destColumnId, destPosition)
+      await cardApi.move(activeId, dest.columnId, dest.position)
       await fetchBoard()
     } catch {
-      // Revert on error
       await fetchBoard()
     }
   }
@@ -159,12 +183,11 @@ export function KanbanBoard() {
 
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCorners}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className="board">
+        <div className="board" ref={boardRef}>
           {board.columns.map((column) => (
             <Column
               key={column.id}

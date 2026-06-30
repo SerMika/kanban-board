@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { Column as ColumnType, Card as CardType, boardApi, cardApi } from '@/lib/api'
+import { Column as ColumnType, boardApi, cardApi } from '@/lib/api'
 import { Card } from './Card'
 
 interface ColumnProps {
@@ -20,7 +20,7 @@ export function Column({ column, boardId, onUpdate }: ColumnProps) {
   const [newCardDescription, setNewCardDescription] = useState('')
 
   const { setNodeRef, isOver } = useDroppable({
-    id: column.id,
+    id: `column-${column.id}`,
     data: { type: 'column', columnId: column.id },
   })
 
@@ -51,7 +51,7 @@ export function Column({ column, boardId, onUpdate }: ColumnProps) {
   }
 
   return (
-    <div className="column" ref={setNodeRef}>
+    <div className={`column ${isOver ? 'drop-zone' : ''}`} data-column-id={column.id}>
       <div className="column-header">
         {isEditing ? (
           <input
@@ -80,18 +80,20 @@ export function Column({ column, boardId, onUpdate }: ColumnProps) {
         )}
       </div>
 
-      <SortableContext items={column.cards.map(c => c.id)} strategy={verticalListSortingStrategy}>
-        <div className={`cards-container ${isOver ? 'drop-zone' : ''}`}>
-          {column.cards.map((card) => (
-            <Card
-              key={card.id}
-              card={card}
-              columnId={column.id}
-              onUpdate={onUpdate}
-            />
-          ))}
-        </div>
-      </SortableContext>
+      <div ref={setNodeRef}>
+        <SortableContext items={column.cards.map(c => c.id)} strategy={verticalListSortingStrategy}>
+          <div className="cards-container">
+            {column.cards.map((card) => (
+              <Card
+                key={card.id}
+                card={card}
+                columnId={column.id}
+                onUpdate={onUpdate}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </div>
 
       {isAddingCard ? (
         <div className="card" style={{ marginTop: 10 }}>

@@ -10,6 +10,7 @@ dist/
 build/
 *.egg-info/
 .next/
+*.tsbuildinfo
 
 # Docker
 .docker/
