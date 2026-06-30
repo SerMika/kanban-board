@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import List
 
@@ -22,14 +22,13 @@ class CardMove(BaseModel):
 
 
 class CardResponse(CardBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     column_id: int
     position: int
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class ColumnBase(BaseModel):
@@ -41,19 +40,17 @@ class ColumnUpdate(BaseModel):
 
 
 class ColumnResponse(ColumnBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     board_id: int
     position: int
     cards: List[CardResponse] = []
 
-    class Config:
-        from_attributes = True
-
 
 class BoardResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     columns: List[ColumnResponse] = []
-
-    class Config:
-        from_attributes = True

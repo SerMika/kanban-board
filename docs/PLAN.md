@@ -77,21 +77,21 @@ kanban-board/
 
 ## Part 3: Backend Tests
 
-- [ ] **3.1** Setup pytest with pytest-asyncio
-- [ ] **3.2** Create test fixtures (test client, test DB)
-- [ ] **3.3** Write tests for auth:
-  - [ ] Login with valid credentials
-  - [ ] Login with invalid credentials
-  - [ ] Protected endpoint without token
-- [ ] **3.4** Write tests for boards:
-  - [ ] Get board
-  - [ ] Rename column
-- [ ] **3.5** Write tests for cards:
-  - [ ] Create card
-  - [ ] Update card
-  - [ ] Move card
-  - [ ] Delete card
-- [ ] **3.6** Run all tests, verify pass
+- [x] **3.1** Setup pytest with pytest-asyncio
+- [x] **3.2** Create test fixtures (test client, test DB)
+- [x] **3.3** Write tests for auth:
+  - [x] Login with valid credentials
+  - [x] Login with invalid credentials
+  - [x] Protected endpoint without token
+- [x] **3.4** Write tests for boards:
+  - [x] Get board
+  - [x] Rename column
+- [x] **3.5** Write tests for cards:
+  - [x] Create card
+  - [x] Update card
+  - [x] Move card
+  - [x] Delete card
+- [x] **3.6** Run all tests, verify pass
 
 ---
 
