@@ -97,17 +97,17 @@ kanban-board/
 
 ## Part 4: Frontend Setup
 
-- [ ] **4.1** Setup project structure (app router) - done
-- [ ] **4.2** Install dependencies:
+- [x] **4.1** Setup project structure (app router)
+- [x] **4.2** Install dependencies:
   - [x] dnd-kit for drag-and-drop
-  - [ ] axios for API calls
-- [ ] **4.3** Create Login page
-- [ ] **4.4** Create Kanban board page
-- [ ] **4.5** Implement Column component with inline rename
-- [ ] **4.6** Implement Card component with edit modal
-- [ ] **4.7** Implement drag-and-drop for cards between columns
-- [ ] **4.8** Add JWT storage (httpOnly cookie or localStorage)
-- [ ] **4.9** Create API client with auth interceptor
+  - [x] axios for API calls
+- [x] **4.3** Create Login page
+- [x] **4.4** Create Kanban board page
+- [x] **4.5** Implement Column component with inline rename
+- [x] **4.6** Implement Card component with edit modal
+- [x] **4.7** Implement drag-and-drop for cards between columns
+- [x] **4.8** Add JWT storage (localStorage)
+- [x] **4.9** Create API client with auth interceptor
 
 ---
 

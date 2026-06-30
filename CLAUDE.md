@@ -31,6 +31,7 @@ For the MVP, this will run locally (in a docker container)
 2. Keep it simple - NEVER over-engineer, ALWAYS simplify, NO unnecessary defensive programming. No extra features - focus on simplicity.
 3. Be concise. Keep README minimal. IMPORTANT: no emojis ever
 4. When hitting issues, always identify root cause before trying a fix. Do not guess. Prove with evidence, then fix the root cause.
+5. When need to run project related command (like alembic, uv, etc) do it inside docker containers and not localy on machine
 
 ## Working documentation
 

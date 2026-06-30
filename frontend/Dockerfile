@@ -1,4 +1,3 @@
-# Development with hot reload
 FROM node:20
 
 WORKDIR /app
