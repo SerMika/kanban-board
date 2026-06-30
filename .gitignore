@@ -38,6 +38,4 @@ coverage/
 *.sqlite
 *.sqlite3
 
-# Alembic
-backend/alembic/versions/*.py
-!backend/alembic/versions/.gitkeep
+# Alembic versions - DO NOT IGNORE, keep migrations in git

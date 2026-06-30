@@ -53,25 +53,25 @@ kanban-board/
 
 ## Part 2: Backend Setup
 
-- [ ] **2.1** Initialize Python project with pyproject.toml and uv
-- [ ] **2.2** Create FastAPI application structure (app/main.py)
-- [ ] **2.3** Setup Alembic for database migrations
-- [ ] **2.4** Create database models:
-  - [ ] User (id, username, password_hash, created_at)
-  - [ ] Board (id, user_id, name, created_at)
-  - [ ] Column (id, board_id, name, position)
-  - [ ] Card (id, column_id, title, description, position, created_at, updated_at)
-- [ ] **2.5** Write initial migration
-- [ ] **2.6** Create API endpoints:
-  - [ ] **2.6.1** POST /api/auth/login - returns JWT
-  - [ ] **2.6.2** GET /api/boards - get user's board
-  - [ ] **2.6.3** PUT /api/boards/{id}/columns/{id} - rename column
-  - [ ] **2.6.4** POST /api/columns/{id}/cards - create card
-  - [ ] **2.6.5** PUT /api/cards/{id} - update card (title, description)
-  - [ ] **2.6.6** PUT /api/cards/{id}/move - move card to column/position
-  - [ ] **2.6.7** DELETE /api/cards/{id} - delete card
-- [ ] **2.7** Add JWT authentication middleware
-- [ ] **2.8** Seed initial columns on board creation (Backlog, In Progress, Done)
+- [x] **2.1** Initialize Python project with pyproject.toml and uv
+- [x] **2.2** Create FastAPI application structure (app/main.py)
+- [x] **2.3** Setup Alembic for database migrations
+- [x] **2.4** Create database models:
+  - [x] User (id, username, password_hash, created_at)
+  - [x] Board (id, user_id, name, created_at)
+  - [x] Column (id, board_id, name, position)
+  - [x] Card (id, column_id, title, description, position, created_at, updated_at)
+- [x] **2.5** Write initial migration
+- [x] **2.6** Create API endpoints:
+  - [x] **2.6.1** POST /api/auth/login - returns JWT
+  - [x] **2.6.2** GET /api/boards - get user's board
+  - [x] **2.6.3** PUT /api/boards/{id}/columns/{id} - rename column
+  - [x] **2.6.4** POST /api/columns/{id}/cards - create card
+  - [x] **2.6.5** PUT /api/cards/{id} - update card (title, description)
+  - [x] **2.6.6** PUT /api/cards/{id}/move - move card to column/position
+  - [x] **2.6.7** DELETE /api/cards/{id} - delete card
+- [x] **2.7** Add JWT authentication middleware
+- [x] **2.8** Seed initial columns on board creation (Backlog, In Progress, Done)
 
 ---
 
